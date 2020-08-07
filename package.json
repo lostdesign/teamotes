@@ -1,0 +1,37 @@
+{
+  "name": "betterchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "electron": "electron .",
+    "vue:dev": "cross-env NODE_ENV=development webpack-dev-server",
+    "electron:dev": "cross-env NODE_ENV=development electron . --force-color-profile=srgb"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0"
+  },
+  "devDependencies": {
+    "electron": "^9.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "tailwindcss": "^1.6.2",
+    "@tailwindcss/ui": "^0.5.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "cross-env": "^7.0.2",
+    "css-loader": "^4.2.1",
+    "file-loader": "^6.0.0",
+    "postcss-loader": "^3.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "style-loader": "^1.2.1",
+    "vue-loader": "^15.9.3",
+    "vue-svg-loader": "^0.16.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

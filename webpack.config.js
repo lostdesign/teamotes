@@ -100,7 +100,7 @@ module.exports = () => ({
     chunkFilename: '[name].bundle.js',
   },
 
-  devtool: process.env.NODE_ENV === 'production' ? 'nonte' : 'source-map',
+  devtool: process.env.NODE_ENV === 'production' ? 'none' : 'source-map',
 
   devServer: {
     host: '0.0.0.0',

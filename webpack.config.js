@@ -92,6 +92,8 @@ module.exports = () => ({
     app: './src/index.js',
   },
 
+  mode: process.env.NODE_ENV,
+
   output: {
     path: path.join(__dirname, 'dist'),
     filename: "[name].bundle.js",

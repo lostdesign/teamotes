@@ -6,7 +6,9 @@
   "scripts": {
     "electron": "electron dist",
     "dev": "cross-env NODE_ENV=development webpack-dev-server",
-    "build": "webpack --production && node ./prebuild && electron-builder"
+    "build": "webpack --production && node ./prebuild && electron-builder",
+    "build:vue": "webpack --production",
+    "build:electron": "node ./prebuild && electron-builder"
   },
   "keywords": [],
   "author": "info@lost.design",

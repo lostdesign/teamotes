@@ -1,5 +1,5 @@
 {
-  "name": "betterchat",
+  "name": "teamotes",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,8 +9,8 @@
     "electron:dev": "cross-env NODE_ENV=development electron . --force-color-profile=srgb"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "info@lost.design",
+  "license": "MIT",
   "dependencies": {
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"

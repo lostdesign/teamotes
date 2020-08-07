@@ -4,6 +4,14 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { spawn } = require('child_process')
 const electron = require('electron')
+const { watch } = require('fs')
+
+let electronProcess
+
+const respawnElectron = () => {
+  if (electronProcess) electronProcess.kill()
+  electronProcess = spawn(electron, ['electron', '--force-color-profile=srgb'])
+}
 
 module.exports = () => ({
   plugins: [
@@ -28,7 +36,10 @@ module.exports = () => ({
         compiler.hooks.done.tap('start electron', () => {
           if (process.env.NODE_ENV === 'development' && !started) {
             started = true
-            spawn(electron, ['electron', '--force-color-profile=srgb'])
+            
+            respawnElectron()
+
+            watch(path.resolve('electron'), respawnElectron)
           }
         });
       }

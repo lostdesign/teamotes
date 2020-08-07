@@ -1,7 +1,9 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+// const CopyPlugin = require('copy-webpack-plugin')
+const { spawn } = require('child_process')
+const electron = require('electron')
 
 module.exports = () => ({
   plugins: [
@@ -11,6 +13,14 @@ module.exports = () => ({
     }),
 
     new VueLoaderPlugin(),
+
+    new class StartElectron {
+      apply (compiler) {
+        compiler.hooks.done.tap('start electron', () => {
+          spawn(electron, ['.', '--force-color-profile=srgb'])
+        });
+      }
+    }
   ],
 
   module: {

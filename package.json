@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "electron": "electron .",
-    "vue:dev": "cross-env NODE_ENV=development webpack-dev-server",
-    "electron:dev": "cross-env NODE_ENV=development electron . --force-color-profile=srgb"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "keywords": [],
   "author": "info@lost.design",

@@ -1,17 +1,20 @@
 <template>
-  <main>
+  <main class="flex">
     <template v-if="finishedLoading">
-      <div class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-4">
-        <template v-for="(image, key) in images">
-          <div class="bg-white p-1 rounded-lg hover:bg-blue-900" :key="key">
-            <img
-              :src="image.path"
-              alt
-              class="w-full object-cover object-center rounded-lg cursor-pointer"
-              @click="copyImageToClipboard(image)"
-            />
-          </div>
-        </template>
+      <div
+        class="column flex flex-col flex-grow"
+        v-for="(column, key) in columns" 
+        :style="{ width: `${100 / columnCount}%`}" 
+        :key="key"
+      >
+        <img
+          v-for="(image, key) in column"
+          :key="key"
+          :src="image.path"
+          class="cursor-pointer h-auto"
+          :alt="image.name"
+          @click="copyImageToClipboard(image)"
+        />
       </div>
     </template>
     <template v-else>
@@ -19,6 +22,15 @@
     </template>
   </main>
 </template>
+
+<style scoped>
+.column > img {
+  margin: 5px;
+  width: calc(100% - 10px); 
+  /* doing this with margin corrects stretching issue */
+}
+</style>
+
 
 <script>
 const fs = window.require("fs");
@@ -31,6 +43,8 @@ export default {
       mediaPath: localStorage.getItem("mediaPath"),
       finishedLoading: false,
       images: [],
+      columns: [],
+      columnCount: 0,
     };
   },
   methods: {
@@ -65,6 +79,21 @@ export default {
       const blob = new Blob(byteArrays, { type: contentType });
       return blob;
     },
+
+    generateColumns () {
+      this.columnCount = Math.round(window.innerWidth / 200)
+      this.columns = []
+
+      for (let i = 0; i < this.columnCount; i++) {
+        this.columns.push([])
+      }
+
+      this.images.forEach((image, index) => {
+        this.columns[
+          Math.floor(index / ( this.images.length / this.columnCount ))
+        ].push(image)
+      })
+    },
   },
   async mounted() {
     const files = await fs.promises.readdir(this.mediaPath)
@@ -77,6 +106,10 @@ export default {
         path: `${path.join(this.mediaPath, file)}`
       });
     }
+
+    this.generateColumns()
+
+    window.addEventListener('resize', this.generateColumns)
 
     this.finishedLoading = true
   }

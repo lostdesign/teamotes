@@ -1,5 +1,6 @@
 # teamotes
 ![Project Status](https://img.shields.io/badge/Status-WIP%20🚧-orange)
+![Preview](https://github.com/lostdesign/teamotes/blob/master/src/assets/teamotes.png?raw=true)
 
 Your app to use emotes anywhere - simply point the app to a folder and click on one of the images.
 You can then paste it anywhere where images are supported.

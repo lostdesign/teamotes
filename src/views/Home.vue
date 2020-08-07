@@ -2,14 +2,13 @@
   <main>
     <template v-if="finishedLoading">
       <div class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-4">
-        <template v-for="image in images">
-          <div class="bg-white p-1 rounded-lg hover:bg-blue-900" :key="image.name">
+        <template v-for="(image, key) in images">
+          <div class="bg-white p-1 rounded-lg hover:bg-blue-900" :key="key">
             <img
-              :src="`data:image/png;base64, ${image.base64}`"
+              :src="image.path"
               alt
-              :key="image"
               class="w-full object-cover object-center rounded-lg cursor-pointer"
-              @click="copyImageToClipboard(image.base64)"
+              @click="copyImageToClipboard(image)"
             />
           </div>
         </template>
@@ -36,10 +35,13 @@ export default {
   },
   methods: {
     copyImageToClipboard(image) {
-      const blob = this.b64ToBlob(image, 'image/png', 512);
+      const buffer = Buffer.from(fs.readFileSync(image.path)).toString('base64');
+      const blob = this.b64ToBlob(buffer, 'image/png', 512);
       const item = new ClipboardItem({ "image/png": blob });
       navigator.clipboard.write([item]);
+      console.log(`Copied ${image.name} to clipboard.`);
     },
+
     b64ToBlob(b64Data, contentType, sliceSize) {
       const byteCharacters = atob(b64Data);
       const byteArrays = [];
@@ -68,13 +70,15 @@ export default {
     const files = await fs.promises.readdir(this.mediaPath)
 
     for (const file of files) {
-      let image = {}
-      image.name = file
-      image.path = `${this.mediaPath}/${file}`
-      image.base64 = Buffer.from(await fs.promises.readFile(image.path)).toString('base64')
-      this.images.push(image)
-      this.finishedLoading = true
+      if (!/.(jpe?g|png|gif)$/.test(file)) continue;
+
+      this.images.push({
+        name: file,
+        path: `${path.join(this.mediaPath, file)}`
+      });
     }
+
+    this.finishedLoading = true
   }
 }
 </script>

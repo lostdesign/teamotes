@@ -1,6 +1,6 @@
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
 
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, shell, protocol } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -30,6 +30,13 @@ const createWindow  = () => {
 }
 
 app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const url = request.url.substr(7)
+    callback({ path: path.normalize(decodeURIComponent(url)) })
+  }, (error) => {
+    if (error) console.error('Failed to register protocol')
+  })
+
   createWindow()
   
   app.on('activate', () => {

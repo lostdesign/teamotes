@@ -1,5 +1,11 @@
 module.exports = {
-    purge: [],
+    purge: {
+      enabled: true, //process.env.NODE_ENV === 'production',
+      content: [
+        './src/**/*.html', 
+        './src/**/*.vue',
+      ],
+    },
     theme: {
       extend: {},
     },

@@ -13,7 +13,7 @@ const createWindow  = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      devTools: process.env.NODE_ENV !== 'production',
+      devTools: process.env.NODE_ENV === 'development',
       webSecurity: false,
       allowRunningInsecureContent: true
     },
@@ -21,7 +21,7 @@ const createWindow  = () => {
 
   mainWindow.setMenuBarVisibility(false)
 
-  if (process.env.NODE_ENV === 'production') mainWindow.loadFile('dist/index.html')
+  if (process.env.NODE_ENV !== 'development') mainWindow.loadFile('index.html')
   
   else {
     mainWindow.loadURL('http://localhost:8080')

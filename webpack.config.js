@@ -55,13 +55,7 @@ module.exports = () => ({
           'css-loader',
           {
             loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: [
-                require('tailwindcss'),
-                require('autoprefixer'),
-              ],
-            },
+            options: require('./postcss.config.js'),
           },
         ],
       },
@@ -98,13 +92,15 @@ module.exports = () => ({
     app: './src/index.js',
   },
 
+  mode: process.env.NODE_ENV,
+
   output: {
     path: path.join(__dirname, 'dist'),
     filename: "[name].bundle.js",
     chunkFilename: '[name].bundle.js',
   },
 
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV === 'production' ? 'none' : 'source-map',
 
   devServer: {
     host: '0.0.0.0',

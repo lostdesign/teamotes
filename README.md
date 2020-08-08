@@ -8,13 +8,13 @@ You can then paste it anywhere where images are supported.
 ## How to install
 1. Clone and npm install
 ```bash
-$ git clone https://github.com/lostdesign/teamotes.git && cd teamotes
-$ npm install
+git clone https://github.com/lostdesign/teamotes.git && cd teamotes
+npm install
 ```
 ## How to use
 1. Run the app
 ```bash
-$ npm run dev
+npm run dev
 ```
 2. Click on settings and select the directory of your emotes.
 3. Click on home and then on the emote to copy it.

@@ -10,7 +10,7 @@
         <img
           v-for="(image, key) in column"
           :key="key"
-          :src="image.path"
+          :src="'file:///' + image.path"
           class="cursor-pointer h-auto"
           :alt="image.name"
           @click="copyImageToClipboard(image)"

@@ -11,7 +11,7 @@
           v-for="(image, key) in column"
           :key="key"
           :src="'file:///' + image.path"
-          class="cursor-pointer h-auto"
+          class="cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 mb-5 p-3 rounded-lg"
           :alt="image.name"
           @click="copyImageToClipboard(image)"
         />
@@ -25,8 +25,7 @@
 
 <style scoped>
 .column > img {
-  margin: 5px;
-  width: calc(100% - 10px); 
+  width: calc(100% - 1.25rem); 
   /* doing this with margin corrects stretching issue */
 }
 </style>
@@ -50,6 +49,7 @@ export default {
   methods: {
     copyImageToClipboard(image) {
       const buffer = Buffer.from(fs.readFileSync(image.path)).toString('base64');
+      // TODO get dynamic file type
       const blob = this.b64ToBlob(buffer, 'image/png', 512);
       const item = new ClipboardItem({ "image/png": blob });
       navigator.clipboard.write([item]);
@@ -102,6 +102,7 @@ export default {
       if (!/.(jpe?g|png|gif)$/.test(file)) continue;
 
       this.images.push({
+        isCopying: false,
         name: file,
         path: `${path.join(this.mediaPath, file)}`
       });

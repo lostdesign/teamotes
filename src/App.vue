@@ -1,6 +1,6 @@
 <template>
-  <div class="flex bg-gray-800">
-    <nav class="flex bg-gray-800 border-r border-solid border-gray-900 h-screen flex-col sticky top-0 left-0">
+  <div class="flex bg-gray-900">
+    <nav class="flex bg-gray-800 border-r border-solid border-gray-800 h-screen flex-col sticky top-0 left-0">
       <router-link to="/" class="m-5 text-white">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@
         </svg>
       </a>
     </nav>
-    <router-view class="p-5 text-white w-full"/>
+    <router-view class="pl-5 pb-5 pt-5 text-white w-full"/>
   </div>
 </template>
 

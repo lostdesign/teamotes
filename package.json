@@ -11,7 +11,7 @@
     "build:electron": "cross-env NODE_ENV=production node ./prebuild && electron-builder"
   },
   "keywords": [],
-  "author": "info@lost.design",
+  "author": "André Weller <info@lost.design> (https://lost.design/)",
   "license": "MIT",
   "dependencies": {
     "vue": "^2.6.11",

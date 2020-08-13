@@ -1,26 +1,30 @@
 <template>
-  <main class="flex">
-    <template v-if="finishedLoading">
-      <div
-        class="column flex flex-col flex-grow"
-        v-for="(column, key) in columns" 
-        :style="{ width: `${100 / columnCount}%`}" 
-        :key="key"
-      >
-        <img
-          v-for="(image, key) in column"
+  <Layout>
+    <main class="flex">
+      <template v-if="finishedLoading">
+        <div
+          class="column flex flex-col flex-grow"
+          v-for="(column, key) in columns" 
+          :style="{ width: `${100 / columnCount}%`}" 
           :key="key"
-          :src="'file:///' + image.path"
-          class="cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 mb-5 p-3 rounded-lg"
-          :alt="image.name"
-          @click="copyImageToClipboard(image)"
-        />
-      </div>
-    </template>
-    <template v-else>
-      Loading ...
-    </template>
-  </main>
+        >
+          <img
+            v-for="(image, key) in column"
+            :key="key"
+            :src="'file:///' + image.path"
+            class="cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover"
+            :alt="image.name"
+            @click="copyImageToClipboard(image)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <div class="flex justify-center items-center w-full flex-col">
+          <h1>Loading content...</h1>
+        </div>
+      </template>
+    </main>
+  </Layout>
 </template>
 
 <style scoped>
@@ -30,54 +34,80 @@
 }
 </style>
 
-
 <script>
-const fs = window.require("fs");
-const path = window.require("path");
+const fs = window.require("fs")
+const path = window.require("path")
+
+import choosePath from '../components/choosePath'
+import Layout from './Layout'
 
 export default {
-  name: "Home",
+  name: 'Home',
   data() {
     return {
-      mediaPath: localStorage.getItem("mediaPath"),
       finishedLoading: false,
       images: [],
       columns: [],
       columnCount: 0,
-    };
+      mediaPath: localStorage.getItem("mediaPath")
+    }
+  },
+  components: {
+    Layout,
+    choosePath
   },
   methods: {
     copyImageToClipboard(image) {
-      const buffer = Buffer.from(fs.readFileSync(image.path)).toString('base64');
+      const buffer = Buffer.from(fs.readFileSync(image.path)).toString('base64')
+      
       // TODO get dynamic file type
-      const blob = this.b64ToBlob(buffer, 'image/png', 512);
-      const item = new ClipboardItem({ "image/png": blob });
-      navigator.clipboard.write([item]);
-      console.log(`Copied ${image.name} to clipboard.`);
+      const blob = this.b64ToBlob(buffer, 'image/png', 512)
+      const item = new ClipboardItem({ "image/png": blob })
+      
+      navigator.clipboard.write([item])
+      console.log(`Copied ${image.name} to clipboard.`)
     },
+    async loadImages() {
+      const files = await fs.promises.readdir(this.mediaPath)
 
+      for (const file of files) {
+        if (!/.(jpe?g|png|gif)$/.test(file)) continue
+
+        this.images.push({
+          isCopying: false,
+          name: file,
+          path: `${path.join(this.mediaPath, file)}`
+        })
+      }
+
+      this.generateColumns()
+
+      window.addEventListener('resize', this.generateColumns)
+
+      this.finishedLoading = true
+    },
     b64ToBlob(b64Data, contentType, sliceSize) {
-      const byteCharacters = atob(b64Data);
-      const byteArrays = [];
+      const byteCharacters = atob(b64Data)
+      const byteArrays = []
 
       for (
         let offset = 0;
         offset < byteCharacters.length;
         offset += sliceSize
       ) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        const byteNumbers = new Array(slice.length);
+        const slice = byteCharacters.slice(offset, offset + sliceSize)
+        const byteNumbers = new Array(slice.length)
+        
         for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
+          byteNumbers[i] = slice.charCodeAt(i)
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+        const byteArray = new Uint8Array(byteNumbers)
+        byteArrays.push(byteArray)
       }
 
-      const blob = new Blob(byteArrays, { type: contentType });
-      return blob;
+      const blob = new Blob(byteArrays, { type: contentType })
+      return blob
     },
 
     generateColumns () {
@@ -95,24 +125,9 @@ export default {
       })
     },
   },
-  async mounted() {
-    const files = await fs.promises.readdir(this.mediaPath)
-
-    for (const file of files) {
-      if (!/.(jpe?g|png|gif)$/.test(file)) continue;
-
-      this.images.push({
-        isCopying: false,
-        name: file,
-        path: `${path.join(this.mediaPath, file)}`
-      });
-    }
-
-    this.generateColumns()
-
-    window.addEventListener('resize', this.generateColumns)
-
-    this.finishedLoading = true
+  mounted() {
+    if(this.mediaPath) this.loadImages()
+    console.log(this.mediaPath)
   }
 }
 </script>

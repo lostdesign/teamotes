@@ -7,12 +7,25 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: (to, from, next) => {
+      if(!localStorage.getItem('mediaPath')) next('/setmediapath')
+      next()
+    }
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue'),
+    beforeEnter: (to, from, next) => {
+      if(!localStorage.getItem('mediaPath')) next('/setmediapath')
+      next()
+    }
+  },
+  {
+    path: '/setmediapath',
+    name: 'SetMediaPath',
+    component: () => import(/* webpackChunkName: "setMediaPath" */ '../views/SetMediaPath.vue')
   }
 ]
 

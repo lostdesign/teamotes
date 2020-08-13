@@ -1,6 +1,6 @@
 {
   "name": "teamotes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Your app to use emotes and memes anywhere.",
   "main": "electron/index.js",
   "scripts": {
@@ -43,23 +43,37 @@
     "win": {
       "icon": "assets/icon.png",
       "target": [
+        "nsis",
         "zip"
       ],
-      "publish": ["github"]
+      "publish": {
+        "provider": "github",
+        "owner": "lostdesign",
+        "repo": "teamotes"
+      }
     },
     "mac": {
 			"target": [
 				"dmg",
 				"zip"
 			],
-      "publish": ["github"]
+      "publish": {
+        "provider": "github",
+        "owner": "lostdesign",
+        "repo": "teamotes"
+      }
     },
     "linux": {
+      "maintainer": "André Weller <info@lost.design> (https://lost.design/)",
       "target": [
         "deb",
         "zip"
       ],
-      "publish": ["github"]
+      "publish": {
+        "provider": "github",
+        "owner": "lostdesign",
+        "repo": "teamotes"
+      }
     },
     "directories": {
       "app": "dist",

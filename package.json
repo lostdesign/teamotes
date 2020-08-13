@@ -1,7 +1,7 @@
 {
   "name": "teamotes",
   "version": "1.0.0",
-  "description": "",
+  "description": "Your app to use emotes and memes anywhere.",
   "main": "electron/index.js",
   "scripts": {
     "electron": "electron dist",

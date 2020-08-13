@@ -39,11 +39,27 @@
   },
   "build": {
     "npmRebuild": true,
+    "appId": "com.teamotes",
     "win": {
       "icon": "assets/icon.png",
       "target": [
         "zip"
-      ]
+      ],
+      "publish": ["github"]
+    },
+    "mac": {
+			"target": [
+				"dmg",
+				"zip"
+			],
+      "publish": ["github"]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "zip"
+      ],
+      "publish": ["github"]
     },
     "directories": {
       "app": "dist",

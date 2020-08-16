@@ -4,18 +4,26 @@
       <template v-if="finishedLoading">
         <div
           class="column flex flex-col flex-grow"
-          v-for="(column, key) in columns" 
+          v-for="(column, columnKey) in columns" 
           :style="{ width: `${100 / columnCount}%`}" 
-          :key="key"
+          :key="columnKey"
         >
-          <img
-            v-for="(image, key) in column"
-            :key="key"
-            :src="'file:///' + image.path"
-            class="cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover"
-            :alt="image.name"
-            @click="copyImageToClipboard(image)"
-          />
+          <div 
+            v-for="(image, imageKey) in column" 
+            :key="imageKey"
+            class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover"
+            @click="copyImageToClipboard(image, columnKey, imageKey)"
+          >
+            <img
+              :src="'file:///' + image.path"
+              :alt="image.name"
+              class="w-full"
+              :isCopying="image.isCopying"
+            />
+            <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-gray-900 top-0 left-0">
+              <Icon>check</Icon> Copied
+            </div>
+          </div>
         </div>
       </template>
       <template v-else>
@@ -28,10 +36,29 @@
 </template>
 
 <style scoped>
-.column > img {
+.column > div {
   width: calc(100% - 1.25rem); 
   /* doing this with margin corrects stretching issue */
+
+  position: relative;
+  overflow: hidden;
 }
+
+.overlay {
+  height: 100%;
+  position: absolute;
+  --bg-opacity: 0.4;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+img[isCopying] + .overlay {
+  opacity: 1;
+}
+
+/* bg-opacity, position, and h-full classes weren't working. will try to figure out why.  */
 </style>
 
 <script>
@@ -40,6 +67,7 @@ const path = window.require("path")
 
 import choosePath from '../components/choosePath'
 import Layout from './Layout'
+import Icon from '@/components/icon'
 
 export default {
   name: 'Home',
@@ -54,7 +82,8 @@ export default {
   },
   components: {
     Layout,
-    choosePath
+    choosePath,
+    Icon,
   },
   methods: {
     copyImageToClipboard(image) {
@@ -64,6 +93,12 @@ export default {
       const blob = this.b64ToBlob(buffer, 'image/png', 512)
       const item = new ClipboardItem({ "image/png": blob })
       
+      image.isCopying = true
+
+      setTimeout(() => {
+        image.isCopying = false
+      }, 1000)
+
       navigator.clipboard.write([item])
       console.log(`Copied ${image.name} to clipboard.`)
     },

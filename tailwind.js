@@ -1,6 +1,6 @@
 module.exports = {
     purge: {
-      enabled: true, //process.env.NODE_ENV === 'production',
+      enabled: true,
       content: [
         './src/**/*.html', 
         './src/**/*.vue',
@@ -9,7 +9,10 @@ module.exports = {
     theme: {
       extend: {},
     },
-    variants: {},
+    variants: {
+      opacity: ['active'],
+      scale: ['active']
+    },
     plugins: [
       require('@tailwindcss/ui'),
     ],

@@ -1,6 +1,6 @@
 {
   "name": "teamotes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Your app to use emotes and memes anywhere.",
   "main": "electron/index.js",
   "scripts": {
@@ -43,8 +43,7 @@
     "win": {
       "icon": "assets/icon.png",
       "target": [
-        "nsis",
-        "zip"
+        "nsis" 
       ],
       "publish": {
         "provider": "github",
@@ -54,8 +53,7 @@
     },
     "mac": {
 			"target": [
-				"dmg",
-				"zip"
+				"dmg"
 			],
       "publish": {
         "provider": "github",
@@ -66,8 +64,7 @@
     "linux": {
       "maintainer": "André Weller <info@lost.design> (https://lost.design/)",
       "target": [
-        "deb",
-        "zip"
+        "deb"
       ],
       "publish": {
         "provider": "github",

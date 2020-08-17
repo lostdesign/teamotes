@@ -1,6 +1,6 @@
 # teamotes
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Project Status](https://img.shields.io/badge/🏷-v1.0.3-green)
 
@@ -66,6 +66,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://poisonapple.dev"><img src="https://avatars3.githubusercontent.com/u/20525464?v=4" width="100px;" alt=""/><br /><sub><b>Andr3wRiv3rs</b></sub></a><br /><a href="https://github.com/lostdesign/teamotes/commits?author=Andr3wRiv3rs" title="Code">💻</a> <a href="#design-Andr3wRiv3rs" title="Design">🎨</a> <a href="#ideas-Andr3wRiv3rs" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://lost.design"><img src="https://avatars0.githubusercontent.com/u/5164617?v=4" width="100px;" alt=""/><br /><sub><b>wellá</b></sub></a><br /><a href="#maintenance-lostdesign" title="Maintenance">🚧</a> <a href="https://github.com/lostdesign/teamotes/commits?author=lostdesign" title="Code">💻</a> <a href="#design-lostdesign" title="Design">🎨</a> <a href="#ideas-lostdesign" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

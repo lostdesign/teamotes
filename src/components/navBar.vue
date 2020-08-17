@@ -64,3 +64,13 @@
     </a>
   </nav>
 </template>
+
+<script>
+export default {
+  methods: {
+    openUrl(url) {
+      window.ipcRenderer.send('open-url', url)
+    }
+  }
+}
+</script>

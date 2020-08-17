@@ -6,18 +6,26 @@
         <template v-if="finishedLoading">
           <div
             class="column flex flex-col flex-grow"
-            v-for="(column, key) in columns" 
+            v-for="(column, columnKey) in columns" 
             :style="{ width: `${100 / columnCount}%`}" 
-            :key="key"
+            :key="columnKey"
           >
-            <img
-              v-for="(image, key) in column"
-              :key="key"
-              :src="'file:///' + image.path"
-              class="cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 hover:opacity-25 mb-5 rounded-lg object-cover transition duration-150 ease-in-out active:bg-green-300 transform active:duration-300 active:transform active:scale-95"
-              :alt="image.name"
-              @click="copyImageToClipboard(image)"
-            />
+            <div 
+              v-for="(image, imageKey) in column" 
+              :key="imageKey"
+              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-solid hover:border-indigo-700"
+              @click="copyImageToClipboard(image, columnKey, imageKey)"
+            >
+              <img
+                :src="'file:///' + image.path"
+                :alt="image.name"
+                class="w-full cursor-pointer h-auto bg-gray-800 rounded-lg object-cover transition duration-150 ease-in-out active:bg-gresen-300 transform active:duration-300 active:transform active:scale-95"
+                :isCopying="image.isCopying"
+              />
+              <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-indigo-700 bg-opacity-75 opacity-0 top-0 left-0 text-xl font-bold transition duration-300">
+                <Icon>check</Icon> Copied
+              </div>
+            </div>
           </div>
         </template>
         <template v-else>
@@ -31,8 +39,12 @@
 </template>
 
 <style scoped>
-.column > img {
+.column > div {
   width: calc(100% - 1.25rem); 
+}
+
+img[isCopying] + .overlay {
+  opacity: 1;
 }
 </style>
 
@@ -42,6 +54,7 @@ const path = window.require('path')
 
 import choosePath from '../components/choosePath'
 import Layout from './Layout'
+import Icon from '@/components/icon'
 
 export default {
   name: 'Home',
@@ -57,7 +70,8 @@ export default {
   },
   components: {
     Layout,
-    choosePath
+    choosePath,
+    Icon,
   },
   methods: {
     copyImageToClipboard(image) {
@@ -70,6 +84,12 @@ export default {
       const blob = this.b64ToBlob(buffer, 'image/png', 512)
       const item = new ClipboardItem({ "image/png": blob })
       
+      image.isCopying = true
+
+      setTimeout(() => {
+        image.isCopying = false
+      }, 450)
+
       navigator.clipboard.write([item])
       console.log(`Copied ${image.name} to clipboard.`)
     },

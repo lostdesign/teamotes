@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Andr3wRiv3rs",
+      "name": "Andr3wRiv3rs",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20525464?v=4",
+      "profile": "https://poisonapple.dev",
+      "contributions": [
+        "code",
+        "design",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "teamotes",
+  "projectOwner": "lostdesign",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

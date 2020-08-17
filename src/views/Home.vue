@@ -13,16 +13,16 @@
             <div 
               v-for="(image, imageKey) in column" 
               :key="imageKey"
-              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover"
+              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-solid hover:border-indigo-700"
               @click="copyImageToClipboard(image, columnKey, imageKey)"
             >
               <img
                 :src="'file:///' + image.path"
                 :alt="image.name"
-                class="w-full cursor-pointer h-auto bg-gray-800 hover:bg-gray-600 hover:opacity-25 rounded-lg object-cover transition duration-150 ease-in-out active:bg-green-300 transform active:duration-300 active:transform active:scale-95"
+                class="w-full cursor-pointer h-auto bg-gray-800 rounded-lg object-cover transition duration-150 ease-in-out active:bg-gresen-300 transform active:duration-300 active:transform active:scale-95"
                 :isCopying="image.isCopying"
               />
-              <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-gray-900 top-0 left-0">
+              <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-indigo-700 bg-opacity-75 opacity-0 top-0 left-0 text-xl font-bold transition duration-300">
                 <Icon>check</Icon> Copied
               </div>
             </div>
@@ -41,27 +41,11 @@
 <style scoped>
 .column > div {
   width: calc(100% - 1.25rem); 
-  /* doing this with margin corrects stretching issue */
-
-  position: relative;
-  overflow: hidden;
-}
-
-.overlay {
-  height: 100%;
-  position: absolute;
-  --bg-opacity: 0.4;
-  opacity: 0;
-  transition: opacity 0.2s;
-  font-size: 18px;
-  font-weight: bold;
 }
 
 img[isCopying] + .overlay {
   opacity: 1;
 }
-
-/* bg-opacity, position, and h-full classes weren't working. will try to figure out why.  */
 </style>
 
 <script>
@@ -104,7 +88,7 @@ export default {
 
       setTimeout(() => {
         image.isCopying = false
-      }, 1000)
+      }, 450)
 
       navigator.clipboard.write([item])
       console.log(`Copied ${image.name} to clipboard.`)

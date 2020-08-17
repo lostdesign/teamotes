@@ -27,6 +27,15 @@
         "design",
         "ideas"
       ]
+    },
+    {
+      "login": "the94air",
+      "name": "Abdalla Arbab",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/18303390?v=4",
+      "profile": "https://abdalla.js.org",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -172,9 +172,9 @@ export default {
     if(this.mediaPath) this.loadImages()
 
     this._keyListener = function(e) {
-      console.log(e.key)
       if (e.key === "/" || e.key === "f" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault()
+        this.searchValue = null
         document.getElementById("emoteSearch").focus()
       }
     }

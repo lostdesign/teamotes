@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-![Project Status](https://img.shields.io/badge/🏷-v1.0.3-green)
+![Project Status](https://img.shields.io/badge/🏷-v1.0.4-green)
 
 ![teamotes-v1 0 2](https://user-images.githubusercontent.com/5164617/90266303-0e7e5180-de54-11ea-98ad-ae8abdcdbf53.gif)
 
@@ -11,6 +11,7 @@ Your app to use emotes anywhere - simply point the app to a folder and click on 
 ## Features
 - Copy any image to clipboard and paste it almost anywhere
 - Searching for emotes in app
+- Keyboard shortcut for search, navigating with tab and selecting emotes with enter
 
 ### Coming soon
 - Variable Image sizes

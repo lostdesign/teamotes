@@ -11,7 +11,8 @@ module.exports = {
     },
     variants: {
       opacity: ['active'],
-      scale: ['active']
+      scale: ['active'],
+      border: ['focus']
     },
     plugins: [
       require('@tailwindcss/ui'),

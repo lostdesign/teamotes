@@ -1,7 +1,13 @@
 <template>
   <Layout>
     <main class="flex flex-col">
-      <input type="text" name="" id="" placeholder="search" class="bg-gray-800 border-none focus:outline-none form-input block w-full sm:text-sm text-white sm:leading-5 mb-5" v-model="searchValue" @keyup="filterImages" style="width: calc(100% - 1.25rem)">
+      <input 
+        type="text" 
+        id="emoteSearch" 
+        tabindex="4"
+        :placeholder='`Search ${images.length} emotes (Press "/" to focus)`' 
+        class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 border-solid focus:border-indigo-700 outline-none  block w-full sm:text-sm text-white sm:leading-5 mb-5" v-model="searchValue" @keyup="filterImages" style="width: calc(100% - 1.25rem)"
+      >
       <div class="flex">
         <template v-if="finishedLoading">
           <div
@@ -11,10 +17,12 @@
             :key="columnKey"
           >
             <div 
-              v-for="(image, imageKey) in column" 
+              v-for="(image, imageKey) in column"
+              :tabindex="imageKey+10"
               :key="imageKey"
-              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-solid hover:border-indigo-700"
+              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-solid hover:border-indigo-700 focus:border-indigo-700 outline-none"
               @click="copyImageToClipboard(image, columnKey, imageKey)"
+              @keydown.enter="copyImageToClipboard(image, columnKey, imageKey)"
             >
               <img
                 :src="'file:///' + image.path"
@@ -65,7 +73,8 @@ export default {
       columns: [],
       columnCount: 0,
       mediaPath: localStorage.getItem("mediaPath"),
-      searchValue: null
+      searchValue: null,
+      timeOut: null,
     }
   },
   components: {
@@ -136,18 +145,24 @@ export default {
       return blob
     },
     generateColumns () {
-      this.columnCount = Math.round(window.innerWidth / 200)
-      this.columns = []
-
-      for (let i = 0; i < this.columnCount; i++) {
-        this.columns.push([])
+      if (this.timeout) {
+        window.cancelAnimationFrame(this.timeout)
       }
+      this.timeout = window.requestAnimationFrame(() => {
 
-      this.filteredImagesList.forEach((image, index) => {
-        this.columns[
-          Math.floor(index / ( this.filteredImagesList.length / this.columnCount ))
-        ].push(image)
-      })
+        this.columnCount = Math.round(window.innerWidth / 200)
+        this.columns = []
+
+        for (let i = 0; i < this.columnCount; i++) {
+          this.columns.push([])
+        }
+
+        this.filteredImagesList.forEach((image, index) => {
+          this.columns[
+            Math.floor(index / ( this.filteredImagesList.length / this.columnCount ))
+          ].push(image)
+        })
+	    })
     },
     filterImages() {
       this.generateColumns()
@@ -155,6 +170,16 @@ export default {
   },
   mounted() {
     if(this.mediaPath) this.loadImages()
+
+    this._keyListener = function(e) {
+      console.log(e.key)
+      if (e.key === "/" || e.key === "f" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        document.getElementById("emoteSearch").focus()
+      }
+    }
+
+    document.addEventListener('keydown', this._keyListener.bind(this));
   },
   computed: {
     filteredImagesList() {
@@ -163,6 +188,10 @@ export default {
         return image.name.toLowerCase().includes(this.searchValue.toLowerCase())
       })
     }
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this._keyListener)
+    document.removeEventListener('resize', this.generateColumns)
   }
 }
 </script>

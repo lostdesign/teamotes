@@ -1,6 +1,6 @@
 <template>
   <nav class="flex bg-gray-900 border-r border-solid border-gray-800 h-screen flex-col sticky top-0 left-0">
-    <router-link to="/" class="m-5 text-white">
+    <router-link to="/" tabindex="0" class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="icon icon-tabler icon-tabler-home hover:text-indigo-500"
@@ -19,7 +19,7 @@
         <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
       </svg>
     </router-link>
-    <router-link to="/settings" class="m-5 text-white">
+    <router-link to="/settings" tabindex="1" class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="icon icon-tabler icon-tabler-settings hover:text-indigo-500"
@@ -41,7 +41,8 @@
     </router-link>
     <a
       href="https://github.com/lostdesign/teamotes"
-      class="m-5 text-white"
+      tabindex="2"
+      class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
       @click.prevent="openUrl('https://github.com/lostdesign/teamotes')"
     >
       <svg

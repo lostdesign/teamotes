@@ -6,7 +6,7 @@
         id="emoteSearch" 
         tabindex="4"
         :placeholder='`Search ${images.length} emotes (Press "/" to focus)`' 
-        class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 border-solid focus:border-indigo-700 outline-none  block w-full sm:text-sm text-white sm:leading-5 mb-5" v-model="searchValue" @keyup="filterImages" style="width: calc(100% - 1.25rem)"
+        class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 focus:border-indigo-700 outline-none  block w-full sm:text-sm text-white sm:leading-5 mb-5" v-model="searchValue" @keyup="filterImages" style="width: calc(100% - 1.25rem)"
       >
       <div class="flex">
         <template v-if="finishedLoading">
@@ -20,7 +20,7 @@
               v-for="(image, imageKey) in column"
               :tabindex="imageKey+10"
               :key="imageKey"
-              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-solid hover:border-indigo-700 focus:border-indigo-700 outline-none"
+              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-indigo-700 focus:border-indigo-700 outline-none"
               @click="copyImageToClipboard(image, columnKey, imageKey)"
               @keydown.enter="copyImageToClipboard(image, columnKey, imageKey)"
             >

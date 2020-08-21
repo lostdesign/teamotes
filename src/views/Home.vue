@@ -1,56 +1,47 @@
 <template>
   <Layout>
     <main class="flex flex-col">
-      <input 
-        type="text" 
-        id="emoteSearch" 
-        tabindex="4"
-        :placeholder='`Search ${images.length} emotes (Press "/" to focus)`' 
-        class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 focus:border-indigo-700 outline-none  block w-full sm:text-sm text-white sm:leading-5 mb-5" v-model="searchValue" @keyup="filterImages" style="width: calc(100% - 1.25rem)"
-      >
-      <div class="flex">
-        <template v-if="finishedLoading">
-          <div
-            class="column flex flex-col flex-grow"
-            v-for="(column, columnKey) in columns" 
-            :style="{ width: `${100 / columnCount}%`}" 
-            :key="columnKey"
+      <div class="sticky top-0 z-10 p-5 bg-gray-900">
+        <input 
+          type="text" 
+          id="emoteSearch" 
+          tabindex="4"
+          :placeholder='`Search ${images.length} emotes (Press "/" to focus)`' 
+          class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 focus:border-indigo-700 outline-none  block w-full sm:text-sm text-white sm:leading-5" v-model="searchValue"
+        >
+      </div>
+      <template v-if="finishedLoading">
+        <div class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-4 px-5 mb-5">
+          <div 
+            v-for="(image, imageKey) in filteredImagesList"
+            :tabindex="imageKey+10"
+            :key="imageKey"
+            class="flex justify-center items-center cursor-pointer relative h-auto bg-gray-800 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-indigo-700 focus:border-indigo-700 outline-none"
+            @click="copyImageToClipboard(image, imageKey)"
+            @keydown.enter="copyImageToClipboard(image, imageKey)"
           >
-            <div 
-              v-for="(image, imageKey) in column"
-              :tabindex="imageKey+10"
-              :key="imageKey"
-              class="cursor-pointer relative h-auto bg-gray-800 hover:bg-gray-600 mb-5 rounded-lg object-cover overflow-hidden border-4 border-gray-900 hover:border-indigo-700 focus:border-indigo-700 outline-none"
-              @click="copyImageToClipboard(image, columnKey, imageKey)"
-              @keydown.enter="copyImageToClipboard(image, columnKey, imageKey)"
-            >
-              <img
-                :src="'file:///' + image.path"
-                :alt="image.name"
-                class="w-full cursor-pointer h-auto bg-gray-800 rounded-lg object-cover transition duration-150 ease-in-out active:bg-gresen-300 transform active:duration-300 active:transform active:scale-95"
-                :isCopying="image.isCopying"
-              />
-              <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-indigo-700 bg-opacity-75 opacity-0 top-0 left-0 text-xl font-bold transition duration-300">
-                <Icon>check</Icon> Copied
-              </div>
+            <img
+              :src="'file:///' + image.path"
+              :alt="image.name"
+              class="w-full cursor-pointer h-auto bg-gray-800 rounded-lg object-cover transition duration-150 ease-in-out active:bg-gresen-300 transform active:duration-300 active:transform active:scale-95"
+              :isCopying="image.isCopying"
+            />
+            <div class="overlay absolute pointer-events-none w-full h-full flex items-center justify-center bg-indigo-700 bg-opacity-75 opacity-0 top-0 left-0 text-xl font-bold transition duration-300">
+              <Icon>check</Icon> Copied
             </div>
           </div>
-        </template>
-        <template v-else>
-          <div class="flex justify-center items-center w-full flex-col">
-            <h1>Loading content...</h1>
-          </div>
-        </template>
-      </div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="flex justify-center items-center w-full px-5 h-screen -mt-32">
+          <h1>Loading content...</h1>
+        </div>
+      </template>
     </main>
   </Layout>
 </template>
 
 <style scoped>
-.column > div {
-  width: calc(100% - 1.25rem); 
-}
-
 img[isCopying] + .overlay {
   opacity: 1;
 }
@@ -59,6 +50,7 @@ img[isCopying] + .overlay {
 <script>
 const fs = window.require('fs')
 const path = window.require('path')
+const mime = window.require('mime-types')
 
 import choosePath from '../components/choosePath'
 import Layout from './Layout'
@@ -83,41 +75,39 @@ export default {
     Icon,
   },
   methods: {
-    copyImageToClipboard(image) {
+    async copyImageToClipboard(image) {
+      image.isCopying = true
+
       let copyCount = localStorage.getItem(image.name)
       localStorage.setItem(image.name, ++copyCount)
 
-      const buffer = Buffer.from(fs.readFileSync(image.path)).toString('base64')
-      
-      // TODO get dynamic file type
-      const blob = this.b64ToBlob(buffer, 'image/png', 512)
-      const item = new ClipboardItem({ "image/png": blob })
-      
-      image.isCopying = true
+      const file = await fs.promises.readFile(image.path)
+      const buffer = await Buffer.from(file).toString('base64')
+
+      const blob = this.b64ToBlob(buffer, image.fileType, 512)
 
       setTimeout(() => {
         image.isCopying = false
       }, 450)
 
-      navigator.clipboard.write([item])
-      console.log(`Copied ${image.name} to clipboard.`)
+      // TODO get dynamic file type
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob })
+      ])
     },
     async loadImages() {
       await fs.promises.readdir(this.mediaPath, (err, files) => {
         const filteredFiles = files.filter(file => {
-          if (/.(jpe?g|png|gif)$/.test(file)) {
+          if (/.(jpe?g|png)$/.test(file)) {
             this.images.push({
               isCopying: false,
+              fileType: mime.contentType(path.extname(`${path.join(this.mediaPath, file)}`)),
               name: file,
               path: `${path.join(this.mediaPath, file)}`,
               count: localStorage.getItem(file) || localStorage.setItem(file, 0)
             })
           }
         })
-        this.generateColumns()
-
-        window.addEventListener('resize', this.generateColumns)
-
         this.finishedLoading = true
       })
     },
@@ -144,29 +134,6 @@ export default {
       const blob = new Blob(byteArrays, { type: contentType })
       return blob
     },
-    generateColumns () {
-      if (this.timeout) {
-        window.cancelAnimationFrame(this.timeout)
-      }
-      this.timeout = window.requestAnimationFrame(() => {
-
-        this.columnCount = Math.round(window.innerWidth / 200)
-        this.columns = []
-
-        for (let i = 0; i < this.columnCount; i++) {
-          this.columns.push([])
-        }
-
-        this.filteredImagesList.forEach((image, index) => {
-          this.columns[
-            Math.floor(index / ( this.filteredImagesList.length / this.columnCount ))
-          ].push(image)
-        })
-	    })
-    },
-    filterImages() {
-      this.generateColumns()
-    }
   },
   mounted() {
     if(this.mediaPath) this.loadImages()

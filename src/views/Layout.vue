@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <navBar />
-    <div class="pl-5 pb-5 pt-5 text-white w-full">
+    <div class="text-white w-full">
       <slot />
     </div>
   </div>

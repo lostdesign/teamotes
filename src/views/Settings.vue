@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <main>
+    <main class="p-5">
       <h1>Settings</h1>
       <h2>Current Path</h2>
       <p>{{ mediaPath }}</p>

@@ -31,7 +31,7 @@ const fs = window.require('fs');
 const path = window.require('path');
 const mime = window.require('mime-types');
 const sharp = window.require('sharp');
-
+const {clipboard, nativeImage } = window.require('electron')
 
 const icon = () => import('@/components/icon');
 const gridItem = () => import('@/components/gridItem');
@@ -56,12 +56,12 @@ export default {
       let copyCount = localStorage.getItem(image.name);
       localStorage.setItem(image.name, ++copyCount);
 
-      const blob =window.nativeImage.createFromPath(image.path)
+      const blob =nativeImage.createFromPath(image.path)
       setTimeout(() => {
         image.isCopying = false;
       }, 450);
 
-      window.clipboard.writeImage(blob)
+      clipboard.writeImage(blob)
 
     },
     async loadImages() {

@@ -32,6 +32,7 @@ const path = window.require('path');
 const mime = window.require('mime-types');
 const sharp = window.require('sharp');
 
+
 const icon = () => import('@/components/icon');
 const gridItem = () => import('@/components/gridItem');
 
@@ -55,20 +56,13 @@ export default {
       let copyCount = localStorage.getItem(image.name);
       localStorage.setItem(image.name, ++copyCount);
 
-      const file = await fs.promises.readFile(image.path);
-      const buffer = await Buffer.from(file).toString("base64");
-
-      const blob = this.b64ToBlob(buffer, image.fileType, 512);
-
+      const blob =window.nativeImage.createFromPath(image.path)
       setTimeout(() => {
         image.isCopying = false;
       }, 450);
 
-      // TODO get dynamic file type
-      // for some reason image/jpg and image/jpeg cause an error "NotAllowedError ..."
-      await navigator.clipboard.write([
-        new ClipboardItem({ "image/png": blob }),
-      ]);
+      window.clipboard.writeImage(blob)
+
     },
     async loadImages() {
       await fs.promises.readdir(this.mediaPath, (err, files) => {

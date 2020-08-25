@@ -1,18 +1,11 @@
 <template>
   <div>
     <div v-if="finishedLoading"
-      class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-4 px-5 mb-5"
+      class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4 px-5 mb-5"
     >
-      <figure
-        v-for="(image, imageKey) in filteredImagesList"
-        :tabindex="imageKey+10"
-        :key="imageKey"
-        class="flex justify-center items-center cursor-pointer relative bg-gray-800 rounded-lg overflow-hidden border-4 border-gray-900 hover:border-indigo-700 focus:border-indigo-700 outline-none"
-        @click="copyImageToClipboard(image, imageKey)"
-        @keydown.enter="copyImageToClipboard(image, imageKey)"
-      >
-        <gridItem :image="image" />
-      </figure>
+      <template v-for="(image, imageKey) in filteredImagesList">
+        <gridItem :key="imageKey" :image="image" :imageKey="0" :imageSize="imageSize"/>
+      </template>
     </div>
     <div class="flex justify-center items center p-5" v-else>
       Loading your media, hold on tight ...
@@ -20,24 +13,17 @@
   </div>
 </template>
 
-<style scoped>
-img[isCopying] + .overlay {
-  opacity: 1;
-}
-</style>
-
 <script>
-const fs = window.require('fs');
-const path = window.require('path');
-const mime = window.require('mime-types');
-const sharp = window.require('sharp');
-const {clipboard, nativeImage } = window.require('electron')
+const fs = window.require('fs')
+const path = window.require('path')
+const mime = window.require('mime-types')
 
 const icon = () => import('@/components/icon');
 const gridItem = () => import('@/components/gridItem');
 
 export default {
   name: 'itemGrid',
+  props: ['imageSize'],
   data() {
     return {
       images: [],
@@ -50,20 +36,6 @@ export default {
     icon,
   },
   methods: {
-    async copyImageToClipboard(image) {
-      image.isCopying = true;
-
-      let copyCount = localStorage.getItem(image.name);
-      localStorage.setItem(image.name, ++copyCount);
-
-      const blob =nativeImage.createFromPath(image.path)
-      setTimeout(() => {
-        image.isCopying = false;
-      }, 450);
-
-      clipboard.writeImage(blob)
-
-    },
     async loadImages() {
       await fs.promises.readdir(this.mediaPath, (err, files) => {
         const filteredFiles = files.filter(file => {
@@ -72,6 +44,7 @@ export default {
               isCopying: false,
               name: file,
               fileType: mime.contentType(path.extname(`${path.join(this.mediaPath, file)}`)),
+              fileOrigin: this.mediaPath,
               path: `${path.join(this.mediaPath, file)}`,
               count: localStorage.getItem(file) || localStorage.setItem(file, 0)
             })
@@ -80,29 +53,6 @@ export default {
         this.finishedLoading = true
         this.$emit('count', this.images.length)
       })
-    },
-    b64ToBlob(b64Data, contentType, sliceSize) {
-      const byteCharacters = atob(b64Data);
-      const byteArrays = [];
-
-      for (
-        let offset = 0;
-        offset < byteCharacters.length;
-        offset += sliceSize
-      ) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-        const byteNumbers = new Array(slice.length);
-
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-
-      const blob = new Blob(byteArrays, { type: contentType });
-      return blob;
     },
   },
   mounted() {

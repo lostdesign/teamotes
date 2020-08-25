@@ -1,9 +1,9 @@
 <template>
-  <div class="sticky top-0 z-10 p-5 bg-gray-900">
+  <div class="sticky top-0 z-10 p-5 bg-gray-900 w-full">
     <input
       class="bg-gray-800 px-3 py-2 rounded-lg border-4 border-gray-900 focus:border-indigo-700 outline-none block w-full sm:text-sm text-white sm:leading-5"
       id="emoteSearch"
-      tabindex="4"
+      tabindex="0"
       type="text"
       :placeholder='`Search ${count} emotes (Press "/" to focus)`'
       v-model="inputValue"

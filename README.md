@@ -4,25 +4,40 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Project Status](https://img.shields.io/badge/🏷-v1.0.4-green)
 
-![teamotes-v1 0 2](https://user-images.githubusercontent.com/5164617/90266303-0e7e5180-de54-11ea-98ad-ae8abdcdbf53.gif)
+![teamotes-v1 1 0](https://user-images.githubusercontent.com/5164617/91173710-88c59600-e6de-11ea-9c66-0785dfd98bb3.gif)
 
 Your app to use emotes anywhere - simply point the app to a folder and click on one of the images. [Download your free copy now!](https://github.com/lostdesign/teamotes/releases)
 
 ## Features
 - Copy any image to clipboard and paste it almost anywhere
 - Searching for emotes in app
-- Keyboard shortcut for search, navigating with tab and selecting emotes with enter
-
-### Coming soon
+- Keyboard shortcuts
 - Variable Image sizes
 - Emote stats
+
+### Coming soon
 - Auto update and Codesigning
 - Quick access like macOS spotlight
+
+### Keyboard shortcuts
+**Search**
+`Shift` + `7` or `Ctrl/CMD` + `F`
+
+**Selecting Emotes**
+Using `Tab` or `Shift` + `Tab` to go reverse
+
+**Copy Emote** 
+`Enter`
+
+**Change Emote Size** 
+`ArrowUp` increases, `ArrowDown` decreases size
 
 ### Demo
 ![teamotes-v1 0 2-demo](https://user-images.githubusercontent.com/5164617/90267087-594c9900-de55-11ea-83c2-9282ac7b7e4a.gif)
 
 Post emotes/images in Github, Twitter, Photo/Video editing software, Discord, Whatsapp, Telegram, your business presentation and many many more!
+
+For more check the [release](https://github.com/lostdesign/teamotes/releases) history.
 
 ### FAQ
 **Why is it called teamotes?**

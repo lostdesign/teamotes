@@ -25,7 +25,7 @@ export default {
           { path: event.path || null }
         ])
       );
-      this.$router.push('/')
+      this.$router.push({ path: '/', query: { path: event.path } })
     },
   }
 }

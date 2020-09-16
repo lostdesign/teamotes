@@ -9,7 +9,7 @@
         <imageGrid v-model="searchValue" :imgSize="activeSize" @count="updateSearch" />
       </div>
       <template v-if="lastImage.name">
-        <div class="h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
+        <div class="emotes h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
           <h1>{{lastImage.name}}</h1>
           <div class="flex space-x-5 mb-5">
             <template v-for="size in sizes">
@@ -33,7 +33,7 @@
         </div>
       </template>
       <template v-else>
-        <div class="h-screen flex justify-center items-center p-5 sticky top-0 right-0 border-l border-solid border-gray-800 " style="min-width:350px">
+        <div class="preview h-screen flex justify-center items-center p-5 sticky top-0 right-0 border-l border-solid border-gray-800 " style="min-width:350px">
           <p class="text-gray-500">Click an Image to see more details</p>
         </div>
       </template>
@@ -44,6 +44,20 @@
 <style scoped>
 img[isCopying] + .overlay {
   opacity: 1;
+}
+.emotes {
+  display: none;
+}
+.preview {
+  display: none;
+}
+@media (min-width: 740px) {
+  .emotes {
+    display: block;
+  }
+  .preview {
+    display: flex;
+  }
 }
 </style>
 

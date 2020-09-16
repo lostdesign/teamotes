@@ -99,7 +99,7 @@ export default {
       // TODO update the image also inside the grid without reload
       // e.g. pass the image back as reference
       fs.rename(
-        this.lastImage.path, 
+        this.lastImage.path,
         `${this.lastImage.fileOrigin}/${this.lastImage.name}`,
         (err) => {
           if (err) throw err

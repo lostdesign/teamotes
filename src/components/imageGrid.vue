@@ -28,30 +28,38 @@ export default {
     return {
       images: [],
       finishedLoading: false,
-      mediaPath: localStorage.getItem("mediaPath"),
+      mediaPath: this.$route.query.path,
     };
   },
   components: {
     gridItem,
     icon,
   },
+  watch: {
+    '$route.query.path': function (newVal, old) {
+      this.mediaPath = newVal;
+      this.loadImages();
+    }
+  },
   methods: {
     async loadImages() {
+      this.images = [];
+      let self = this;
       await fs.promises.readdir(this.mediaPath, (err, files) => {
         const filteredFiles = files.filter(file => {
           if (/.(jpe?g|png)$/.test(file)) {
-            this.images.push({
+            self.images.push({
               isCopying: false,
               name: file,
-              fileType: mime.contentType(path.extname(`${path.join(this.mediaPath, file)}`)),
-              fileOrigin: this.mediaPath,
-              path: `${path.join(this.mediaPath, file)}`,
+              fileType: mime.contentType(path.extname(`${path.join(self.mediaPath, file)}`)),
+              fileOrigin: self.mediaPath,
+              path: `${path.join(self.mediaPath, file)}`,
               count: localStorage.getItem(file) || localStorage.setItem(file, 0)
             })
           }
         })
-        this.finishedLoading = true
-        this.$emit('count', this.images.length)
+        self.finishedLoading = true;
+        self.$emit('count', self.images.length);
       })
     },
   },

@@ -3,22 +3,28 @@
     <undrawEmpty class="w-full sm:w-full md:w-1/2" />
     <div class="w-full sm:w-full md:w-1/2 p-5 bg-gray-80s0 text-white rounded-lg flsex flex-col justify-center items-center">
       <p class="mb-5 font-black text-2xl tesxt-center">Get started by choosing a folder for your images!</p>
-      <choosePath @localStorageUpdate="updateMediaPath" />
+      <choosePath @localStorageUpdate="updateMediaPath($event)" />
     </div>
   </main>
 </template>
 
 <script>
-import choosePath from "../components/choosePath"
-import undrawEmpty from "../assets/undraw_empty.svg"
+import choosePath from "../components/choosePath";
+import undrawEmpty from "../assets/undraw_empty.svg";
 
 export default {
   components: {
     choosePath,
-    undrawEmpty    
+    undrawEmpty
   },
   methods: {
-    updateMediaPath(value) {
+    updateMediaPath(event) {
+      localStorage.setItem(
+        "mediaPaths",
+        JSON.stringify([
+          { path: event.path || null }
+        ])
+      );
       this.$router.push('/')
     },
   }

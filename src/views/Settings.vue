@@ -3,7 +3,7 @@
     <main class="p-5">
       <h1>Settings</h1>
       <h2>Current Path</h2>
-      <p>{{ mediaPath }}</p>
+      <p v-if="mediaPath"><code class="text-sm bg-black bg-opacity-50 p-1 rounded">{{ mediaPath }}</code></p>
       <choosePath @localStorageUpdate="updateMediaPath" class="mt-5"/>
       <h2 class="mt-5">Reset emote counter</h2>
       <p>By clicking this button, all your click stats will be deleted right away without warning.</p>

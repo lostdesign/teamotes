@@ -60,6 +60,27 @@
           </svg>
           Add a folder
         </button>
+        <button
+          class="inline-flex items-center px-2 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-700 hover:bg-indigo-500 focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700 transition ease-in-out duration-150 cursor-pointer"
+          @click="reloadPage"
+        >
+          <svg
+            class="icon icon-tabler icon-tabler-refresh mr-2"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5" />
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5" />
+          </svg>
+          Reload
+        </button>
       </div>
       <div>
         <h2 class="mt-5">Reset emote counter</h2>
@@ -134,6 +155,9 @@ export default {
           })
         })
       })
+    },
+    reloadPage() {
+      window.location.reload(true);
     }
   }
 }

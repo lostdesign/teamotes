@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <div v-if="finishedLoading"
       class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4 px-5 mb-5"
     >
@@ -29,7 +29,18 @@ export default {
       images: [],
       finishedLoading: false,
       mediaPath: this.$route.query.path,
+      mediaPaths: localStorage.getItem("mediaPaths") === null ? [] : JSON.parse(localStorage.getItem("mediaPaths"))
     };
+  },
+  mounted() {
+    // // fallback to first media path
+    // if (this.$route.query.path === undefined) {
+    //   if(this.mediaPaths[0]) {
+    //     this.mediaPath = this.mediaPaths[0].path
+    //   }
+    // }
+
+    if (this.mediaPath) this.loadImages();
   },
   components: {
     gridItem,
@@ -62,9 +73,6 @@ export default {
         self.$emit('count', self.images.length);
       })
     },
-  },
-  mounted() {
-    if (this.mediaPath) this.loadImages();
   },
   computed: {
     filteredImagesList() {

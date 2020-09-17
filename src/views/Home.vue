@@ -1,8 +1,8 @@
 <template>
   <Layout>
     <main class="flex">
-      <div class="flex flex-col">
-        <div class="flex sticky top-0 z-50">
+      <div class="flex flex-col w-full">
+        <div class="flex w-full sticky top-0 z-50">
           <search :count="count" v-model="searchValue" />
           <sizeSelector />
         </div>

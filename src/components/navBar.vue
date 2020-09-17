@@ -6,11 +6,13 @@
         :key="index"
         :to="{ path: '/', query: { path: media.path }}"
         tabindex="0"
-        class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
+        class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
       >
-        <span class="break-all" style="font-size: 0.64rem">{{ getFolderName(media.path) }}</span>
+        <span class="break-all leading-none" style="font-size: 0.8rem">{{ getFolderName(media.path) }}</span>
       </router-link>
-      <router-link to="/settings" tabindex="0" class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
+    </div>
+    <div class="w-24 flex flex-col mb-10">
+      <router-link to="/settings" tabindex="0" class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-settings hover:text-indigo-500"
@@ -33,7 +35,7 @@
       <a
         href="https://github.com/lostdesign/teamotes"
         tabindex="0"
-        class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
+        class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
         @click.prevent="openUrl('https://github.com/lostdesign/teamotes')"
       >
         <svg
@@ -54,8 +56,10 @@
           />
         </svg>
       </a>
+      <div class="text-center">
+        <span class="self-end text-xs text-gray-500">v{{version}}</span>
+      </div>
     </div>
-    <span class="m-5 text-white self-end text-xs text-gray-500">v{{version}}</span>
   </nav>
 </template>
 
@@ -76,7 +80,15 @@ export default {
   methods: {
     getFolderName(path) {
       if(path) {
-        return path.replace(/^.*(\\|\/|\:)/, '');
+        let folderName = path.replace(/^.*(\\|\/|\:)/, '');
+        let folderNameWords = folderName.replace(/-/g, ' ').replace(/_/g, ' ').split(" ");
+
+        let name = folderNameWords.map((word, index) => {
+          let firstLetter = word.charAt(0).toUpperCase();
+          let addDot = index + 1 === folderNameWords.length ? '' : '.';
+          return firstLetter + addDot;
+        })
+        return name.join("");
       }
     },
     openUrl(url) {

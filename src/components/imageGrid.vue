@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <div v-if="finishedLoading"
       class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4 px-5 mb-5"
     >
@@ -28,35 +28,51 @@ export default {
     return {
       images: [],
       finishedLoading: false,
-      mediaPath: localStorage.getItem("mediaPath"),
+      mediaPath: this.$route.query.path,
+      mediaPaths: localStorage.getItem("mediaPaths") === null ? [] : JSON.parse(localStorage.getItem("mediaPaths"))
     };
+  },
+  mounted() {
+    // fallback to first media path
+    if (this.$route.query.path === undefined) {
+      if(this.mediaPaths[0]) {
+        this.mediaPath = this.mediaPaths[0].path
+      }
+    }
+
+    if (this.mediaPath) this.loadImages();
   },
   components: {
     gridItem,
     icon,
   },
+  watch: {
+    '$route.query.path': function (newVal, old) {
+      this.mediaPath = newVal;
+      this.loadImages();
+    }
+  },
   methods: {
     async loadImages() {
+      this.images = [];
+      let self = this;
       await fs.promises.readdir(this.mediaPath, (err, files) => {
         const filteredFiles = files.filter(file => {
           if (/.(jpe?g|png)$/.test(file)) {
-            this.images.push({
+            self.images.push({
               isCopying: false,
               name: file,
-              fileType: mime.contentType(path.extname(`${path.join(this.mediaPath, file)}`)),
-              fileOrigin: this.mediaPath,
-              path: `${path.join(this.mediaPath, file)}`,
+              fileType: mime.contentType(path.extname(`${path.join(self.mediaPath, file)}`)),
+              fileOrigin: self.mediaPath,
+              path: `${path.join(self.mediaPath, file)}`,
               count: localStorage.getItem(file) || localStorage.setItem(file, 0)
             })
           }
         })
-        this.finishedLoading = true
-        this.$emit('count', this.images.length)
+        self.finishedLoading = true;
+        self.$emit('count', self.images.length);
       })
     },
-  },
-  mounted() {
-    if (this.mediaPath) this.loadImages();
   },
   computed: {
     filteredImagesList() {

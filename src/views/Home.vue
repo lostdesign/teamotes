@@ -1,15 +1,15 @@
 <template>
   <Layout>
     <main class="flex">
-      <div class="flex flex-col">
-        <div class="flex sticky top-0 z-50">
+      <div class="flex flex-col w-full">
+        <div class="flex w-full sticky top-0 z-50">
           <search :count="count" v-model="searchValue" />
           <sizeSelector />
         </div>
         <imageGrid v-model="searchValue" :imgSize="activeSize" @count="updateSearch" />
       </div>
       <template v-if="lastImage.name">
-        <div class="h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
+        <div class="emotes h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
           <h1>{{lastImage.name}}</h1>
           <div class="flex space-x-5 mb-5">
             <template v-for="size in sizes">
@@ -33,7 +33,7 @@
         </div>
       </template>
       <template v-else>
-        <div class="h-screen flex justify-center items-center p-5 sticky top-0 right-0 border-l border-solid border-gray-800 " style="min-width:350px">
+        <div class="preview h-screen flex justify-center items-center p-5 sticky top-0 right-0 border-l border-solid border-gray-800 " style="min-width:350px">
           <p class="text-gray-500">Click an Image to see more details</p>
         </div>
       </template>
@@ -44,6 +44,20 @@
 <style scoped>
 img[isCopying] + .overlay {
   opacity: 1;
+}
+.emotes {
+  display: none;
+}
+.preview {
+  display: none;
+}
+@media (min-width: 740px) {
+  .emotes {
+    display: block;
+  }
+  .preview {
+    display: flex;
+  }
 }
 </style>
 
@@ -85,7 +99,7 @@ export default {
       // TODO update the image also inside the grid without reload
       // e.g. pass the image back as reference
       fs.rename(
-        this.lastImage.path, 
+        this.lastImage.path,
         `${this.lastImage.fileOrigin}/${this.lastImage.name}`,
         (err) => {
           if (err) throw err

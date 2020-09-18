@@ -9,7 +9,7 @@ Vue.use(VueRouter)
     name: 'Home',
     component: Home,
     beforeEnter: (to, from, next) => {
-      if(!localStorage.getItem('mediaPath')) next('/setmediapath')
+      if(!localStorage.getItem('mediaPaths')) next('/setmediapath')
       next()
     }
   },
@@ -18,7 +18,7 @@ Vue.use(VueRouter)
     name: 'Settings',
     component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue'),
     beforeEnter: (to, from, next) => {
-      if(!localStorage.getItem('mediaPath')) next('/setmediapath')
+      if(!localStorage.getItem('mediaPaths')) next('/setmediapath')
       next()
     }
   },

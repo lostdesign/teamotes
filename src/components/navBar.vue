@@ -1,26 +1,18 @@
 <template>
   <nav class="flex bg-gray-900 border-r border-solid border-gray-800 h-screen flex-col sticky top-0 left-0 justify-between">
-    <div class="w-full flex flex-col">
-      <router-link to="/" tabindex="0" class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="icon icon-tabler icon-tabler-home hover:text-indigo-500"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" />
-          <polyline points="5 12 3 12 12 3 21 12 19 12" />
-          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-        </svg>
+    <div class="w-24 flex flex-col">
+      <router-link
+        v-for="(media, index) in medias"
+        :key="index"
+        :to="{ path: '/', query: { path: media.path }}"
+        tabindex="0"
+        class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
+      >
+        <span class="break-all leading-none" style="font-size: 0.8rem">{{ getFolderName(media.path) }}</span>
       </router-link>
-      <router-link to="/settings" tabindex="0" class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
+    </div>
+    <div class="w-24 flex flex-col mb-10">
+      <router-link to="/settings" tabindex="0" class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-settings hover:text-indigo-500"
@@ -43,7 +35,7 @@
       <a
         href="https://github.com/lostdesign/teamotes"
         tabindex="0"
-        class="m-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
+        class="mx-auto p-5 text-white border-4 border-solid border-gray-900 focus:border-indigo-700 outline-none rounded-lg"
         @click.prevent="openUrl('https://github.com/lostdesign/teamotes')"
       >
         <svg
@@ -64,8 +56,10 @@
           />
         </svg>
       </a>
+      <div class="text-center">
+        <span class="self-end text-xs text-gray-500">v{{version}}</span>
+      </div>
     </div>
-    <span class="m-5 text-white self-end text-xs text-gray-500">v{{version}}</span>
   </nav>
 </template>
 
@@ -74,10 +68,29 @@ import {version} from '../../package.json'
 export default {
   data() {
     return {
-      version
+      version,
+      mediaPaths: localStorage.getItem("mediaPaths") === null ? [] : JSON.parse(localStorage.getItem("mediaPaths"))
+    }
+  },
+  computed: {
+    medias() {
+      return this.mediaPaths.filter(value => value.path !== null);
     }
   },
   methods: {
+    getFolderName(path) {
+      if(path) {
+        let folderName = path.replace(/^.*(\\|\/|\:)/, '');
+        let folderNameWords = folderName.replace(/-/g, ' ').replace(/_/g, ' ').split(" ");
+
+        let name = folderNameWords.map((word, index) => {
+          let firstLetter = word.charAt(0).toUpperCase();
+          let addDot = index + 1 === folderNameWords.length ? '' : '.';
+          return firstLetter + addDot;
+        })
+        return name.join("");
+      }
+    },
     openUrl(url) {
       window.ipcRenderer.send('open-url', url)
     }

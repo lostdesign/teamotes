@@ -2,7 +2,7 @@ module.exports = {
   purge: {
     enabled: false,
     content: [
-      './src/**/*.html', 
+      './src/**/*.html',
       './src/**/*.vue',
     ],
   },

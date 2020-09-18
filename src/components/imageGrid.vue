@@ -33,12 +33,12 @@ export default {
     };
   },
   mounted() {
-    // // fallback to first media path
-    // if (this.$route.query.path === undefined) {
-    //   if(this.mediaPaths[0]) {
-    //     this.mediaPath = this.mediaPaths[0].path
-    //   }
-    // }
+    // fallback to first media path
+    if (this.$route.query.path === undefined) {
+      if(this.mediaPaths[0]) {
+        this.mediaPath = this.mediaPaths[0].path
+      }
+    }
 
     if (this.mediaPath) this.loadImages();
   },

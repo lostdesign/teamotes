@@ -6,7 +6,7 @@
           <search :count="count" v-model="searchValue" />
           <sizeSelector />
         </div>
-        <imageGrid v-model="searchValue" :imgSize="activeSize" @count="updateSearch" ref="grid" />
+        <imageGrid ref="grid" v-model="searchValue" :imgSize="activeSize" @count="updateSearch" />
       </div>
       <template v-if="lastImage.name">
         <div class="h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
@@ -48,7 +48,6 @@ img[isCopying] + .overlay {
 </style>
 
 <script>
-const fs = window.require('fs')
 const path = window.require('path')
 
 import Layout from './Layout'

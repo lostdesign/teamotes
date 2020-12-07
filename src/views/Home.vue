@@ -48,8 +48,6 @@ img[isCopying] + .overlay {
 </style>
 
 <script>
-const path = window.require('path')
-
 import Layout from './Layout'
 import imageGrid from '@/components/imageGrid'
 import search from '@/components/search'

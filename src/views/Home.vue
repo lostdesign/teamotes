@@ -6,7 +6,7 @@
           <search :count="count" v-model="searchValue" />
           <sizeSelector />
         </div>
-        <imageGrid v-model="searchValue" :imgSize="activeSize" @count="updateSearch" />
+        <imageGrid ref="grid" v-model="searchValue" :imgSize="activeSize" @count="updateSearch" />
       </div>
       <template v-if="lastImage.name">
         <div class="h-screen p-5 sticky top-0 right-0 border-l border-solid border-gray-800 overflow-hidden" style="min-width:40s0px">
@@ -27,9 +27,9 @@
             id="emoteName"
             tabindex="0"
             type="text"
-            v-model="lastImage.name"
+            v-model="newName"
           />
-          <div class="bg-indigo-700 rounded-lg px-3 py-2 border-4 border-gray-900 cursor-not-allowed">Save</div>
+          <div class="rounded-lg px-3 py-2 border-4 border-gray-900  text-center" :class="isNameChanged ? 'bg-indigo-700 cursor-pointer' : 'bg-indigo-500 cursor-not-allowed'" @click="renameImage">Save</div>
         </div>
       </template>
       <template v-else>
@@ -48,9 +48,6 @@ img[isCopying] + .overlay {
 </style>
 
 <script>
-const fs = window.require('fs')
-const path = window.require('path')
-
 import Layout from './Layout'
 import imageGrid from '@/components/imageGrid'
 import search from '@/components/search'
@@ -65,7 +62,8 @@ export default {
       searchValue: null,
       sizes: [50, 100, 150],
       activeSize: localStorage.getItem('currentSize'),
-      lastImage: {}
+      lastImage: {},
+      newName: ''
     }
   },
   components: {
@@ -79,23 +77,17 @@ export default {
     updateSearch(value) {
       this.count = value
     },
-    renameImage() {
-      console.log(this.lastImage.path, `${this.lastImage.fileOrigin}/${this.lastImage.name}`)
-      return
-      // TODO update the image also inside the grid without reload
-      // e.g. pass the image back as reference
-      fs.rename(
-        this.lastImage.path, 
-        `${this.lastImage.fileOrigin}/${this.lastImage.name}`,
-        (err) => {
-          if (err) throw err
-          console.log('RENAMED')
-      })
+    async renameImage() {
+      // Call rename function in imageGrid component
+      this.lastImage = await this.$refs.grid.renameImage(this.lastImage, this.newName)
     }
   },
   mounted() {
     window.addEventListener('lastCopiedImage-localstorage-changed', (event) => {
       this.lastImage = event.detail
+      
+      // Copy current file name to variable
+      this.newName = event.detail.name
     });
   },
   computed: {
@@ -108,7 +100,10 @@ export default {
         image.isCopying = false
         return image
       },
+    },
+    isNameChanged() {
+      return this.newName !== this.lastImage.name
     }
-  }
+  },
 }
 </script>

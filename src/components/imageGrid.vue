@@ -54,6 +54,26 @@ export default {
         this.$emit('count', this.images.length)
       })
     },
+    async renameImage(file, newName) {
+      // Find index of image
+      const index = this.images.findIndex(image => image.path === file.path)
+      if (index === -1) throw new Error('Image not found')
+      
+      // Change file name
+      await fs.promises.rename(file.path,`${file.fileOrigin}/${newName}`)
+
+      // Update image
+      this.images[index].name = newName
+      this.images[index].path = file.path.replace(file.name, newName)
+
+      // Update localstorage
+      const copyCount = localStorage.getItem(file.name)
+      localStorage.setItem(newName, copyCount)
+      localStorage.removeItem(file.name)
+
+      // Return new image back to parent
+      return { ...this.images[index], count: copyCount, isCopying: false }
+    }
   },
   mounted() {
     if (this.mediaPath) this.loadImages();

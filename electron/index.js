@@ -14,11 +14,10 @@ const createWindow  = () => {
       nodeIntegration: true,
       devTools: process.env.NODE_ENV === 'development',
       webSecurity: false,
-      allowRunningInsecureContent: true
+      allowRunningInsecureContent: true,
+      autoHideMenuBar: true
     },
   })
-
-  mainWindow.setMenuBarVisibility(false)
 
   if (process.env.NODE_ENV !== 'development') mainWindow.loadFile('index.html')
   
